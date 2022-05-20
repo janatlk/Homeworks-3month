@@ -6,9 +6,6 @@ from aiogram.types import KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardMar
 from config import bot, dp, ADMIN
 from database import bot_db
 
-async def on_startup(_):
-    db.create_
-
 cancel_button = KeyboardButton("CANCEL")
 cancel_marcup = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
 
@@ -91,7 +88,7 @@ async def show_reg(message: types.Message,state: FSMContext):
 
 async def delete_data(message: types.Message):
     if message.from_user.id in ADMIN:
-        result = await bot_data.sql_command_all()
+        result = await bot_db.sql_command_all()
         for i in result:
             await bot.send_photo(message.from_user.id,
                                  i[0],
@@ -122,4 +119,5 @@ def reg_load(message:types.Message):
     dp.register_message_handler(show_reg,commands=['ch'])
     dp.register_message_handler(delete_data,commands=['del','delete'],commands_prefix="!/")
     dp.register_message_handler(complete_delete,
-                                lambda call: call.data and call.data.startswith("delete "))
+                                lambda call: call.data and
+                                             call.data.startswith("delete "))
