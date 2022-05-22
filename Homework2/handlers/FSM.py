@@ -20,12 +20,15 @@ class FSMAdmin(StatesGroup):
 
 async def fsm_start(message: types.Message):
     if message.chat.type == 'private':
-        await FSMAdmin.photo.set()
-        await bot.send_message(
-            message.chat.id,
-            f"Привет {message.from_user.full_name}, скинь фотку блюда!",
-            reply_markup=cancel_marcup
-        )
+        if message.from_user.id in ADMIN:
+            await FSMAdmin.photo.set()
+            await bot.send_message(
+                message.chat.id,
+                f"Привет {message.from_user.full_name}, скинь фотку блюда!",
+                reply_markup=cancel_marcup
+            )
+        else:
+            await message.answer("Вы не админ!")
     else:
         await message.answer("Пиши в личку!")
 
@@ -118,6 +121,6 @@ def reg_load(message:types.Message):
     dp.register_message_handler(fsm_start,commands=['reg'])
     dp.register_message_handler(show_reg,commands=['ch'])
     dp.register_message_handler(delete_data,commands=['del','delete'],commands_prefix="!/")
-    dp.register_message_handler(complete_delete,
+    dp.register_callback_query_handler(complete_delete,
                                 lambda call: call.data and
                                              call.data.startswith("delete "))

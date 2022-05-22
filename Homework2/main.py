@@ -1,7 +1,7 @@
 from config import dp
 from aiogram.utils import executor
 import logging
-from handlers import extra, callback, client, admin, FSM
+from handlers import extra, callback, client, admin, FSM, schedule
 from database import bot_db
 # from repo import ефыл
 import asyncio
@@ -15,7 +15,9 @@ callback.register_callbacks(dp)
 admin.register_pin(dp)
 client.register_handler(dp)
 FSM.reg_load(dp)
+schedule.register_alarm(dp)
 extra.register_all(dp)
+
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
